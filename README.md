@@ -1,4 +1,4 @@
-# LLMNR-attack
+# SMB attack
 Découverte et exploitation du protocole LLMNR
 
 ## Protocoles NBT-NS, LLMNR?
