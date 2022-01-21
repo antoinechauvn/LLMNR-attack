@@ -1,27 +1,31 @@
 # LLMNR-attack
 Découverte et exploitation du protocole LLMNR
 
->Link-Local Multicast Name Resolution (LLMNR) est un protocole capable d'effectuer la résolution de noms en l'absence d'un serveur DNS. Lorsqu'une demande est faite pour un partage tel que `\\Fileshares` et que l'utilisateur tape accidentellement `\\Filesharez`, ce qui rend le nom du partage incorrect, le DNS tente d'abord de résoudre le partage cible et s'il n'y parvient pas (car il n'existe pas), il se rabat sur LLMNR.
-Une fois que le DNS n'a pas réussi à résoudre la requête et que LLMNR entre en jeu, la machine demandeuse envoie une diffusion sur le sous-réseau demandant si l'un des autres périphériques peut la connecter au partage. La machine attaquante sur le réseau répond à la requête en indiquant qu'elle peut la connecter au partage. À ce stade, la machine demandeuse (victime) envoie le nom d'utilisateur et le hachage NTLMv2 du compte demandant la ressource à la machine malveillante.
+## Protocoles NBT-NS, LLMNR?
+>Link-Local Multicast Name Resolution (LLMNR) et Netbios Name Service (NBT-NS) sont deux composants présents en environnement Microsoft. LLMNR a été introduit dans Windows Vista et est le successeur de NBT-NS.
 
-## NTLM
->NTLM (NT Lan Manager) est un protocole d'authentification utilisé dans diverses implémentations des protocoles réseau Microsoft et pris en charge par le « NTLMSSP » (Fournisseur de support de sécurité NT LM). À l'origine utilisé pour une authentification et une négociation sécurisée, NTLM est aussi utilisé partout dans les systèmes de Microsoft comme un mécanisme d'authentification unique (single sign-on).
-NTLM utilise un mécanisme de « stimulation/réponse » (« challenge-response ») pour l'authentification, dans laquelle les clients sont capables de prouver leurs identités sans envoyer un mot de passe au serveur. Cela consiste en trois messages, généralement mentionnés comme Type 1 (la négociation), Type 2 (la stimulation) et Type 3 (l'authentification). Il fonctionne essentiellement comme suit :
+>Ces composants permettent d’aider à identifier des hôtes sur le même sous-réseau lorsque les services DNS centraux échouent. Ainsi, si une machine tente de résoudre un hôte particulier, mais que la résolution DNS échoue, la machine tentera alors de demander à toutes les autres machines du réseau local la bonne adresse via NBT-NS ou LLMNR :
 
-* **Le client envoie un message Type 1 au serveur. Celui-ci contient principalement une liste des fonctionnalités prises en charge par le client et demandées au serveur.**
+>NBT-NS est basée sur l’identification par le nom NetBIOS – Utilise le port TCP 137
+LLMNR est basé sur le format DNS (Domain Name System) – Utilise le port UDP 5355
+Historiquement, Microsoft et Apple ont proposé comme standards leurs propres protocoles en se basant sur Multicast Domain Name Service: Microsoft a développé LLMNR et Apple mDNS. La différence majeure entre les deux protocoles se situe au niveau de la gestion des noms de domaine. Là où mDNS n’autorise que des noms de domaine sur l’espace « .local. », LLMNR ne filtre pas et autorise tous les noms de domaine (nous verrons par la suite que cela peut poser un réel problème de sécurité). LLMNR n’a pas réussi à s’imposer comme standard. Le protocole mDNS est beaucoup plus largement utilisés que LLMNR.
 
-* **Le serveur répond par un message Type 2. Celui-ci contient une liste de fonctionnalités prises en charge et accordées par le serveur. Le plus important cependant, il contient une « stimulation » produite par le serveur.**
+>Pourtant LLMNR ou NBT-NS (aussi obsolète) sont très utilisés dans Windows. mDNS a également été implémenté à partir de Windows 10, mais son utilisation est limitée à la découverte d’une imprimante en réseau.
 
-* **Le client répond à la « stimulation » avec un message Type 3. Celui-ci contient plusieurs informations au sujet du client, comprenant le domaine et le nom d'utilisateur du client. Il contient également une ou plusieurs réponses à la « stimulation » Type 2.
-Les réponses dans le message du type 3 sont la partie la plus critique, car elles prouvent au serveur que l'utilisateur client a la connaissance du mot de passe du compte.
-L'authentification Stimulation/Réponse de Windows NT ne pouvant pas franchir un pare-feu, elle est surtout utile sur les intranets, où la communication intervient derrière le pare-feu d'une organisation. Elle est également souvent utilisée pour l'authentification des utilisateurs sur un serveur proxy.**
+## Recherche de noms sur le réseau
+Quand un client recherche un nom sur le réseau il effectue sa recherche en plusieurs étapes et attend une réponse d’un service distant. Prenons un exemple, je recherche le partage réseau \\srvinconnu
+Windows va effectuer les recherches via plusieurs mécanisme pour tenter de trouver \\srvinconnu
 
-https://github.com/lgandx/Responder
+* Recherche en utilisant le HOST  local de la machine (C:\Windows\System32\drivers\etc\hosts);
+* S’il ne trouve rien: recherche dans le cache DNS local (ipconfig /displaydns);
+* S’il ne trouve rien: recherche dans le/les DNS configuré(s) dans la carte réseau;
+* S’il ne trouve rien: recherche NetBIOS  en utilisant NBT-NS et en broadcastant le subnet;
+* Si personne ne lui répond: recherche en utilisant LLMNR et en diffusant sur l’adresse multicast;
+* Si personne ne lui répond: échec de la recherche. Partage réseau introuvable.
 
-https://www.cynet.com/attack-techniques-hands-on/llmnr-nbt-ns-poisoning-and-credential-access-using-responder/
+Nous pouvons voir les 3 étapes avec une analyse de trame ci dessous (les 2 premières étant locales, elles ne s’affichent bien évidement pas):
+*  DNS (Requête vers le serveur DNS 192.168.0.104 : name srvinconnu.test.local)
+*  NBTNS (Diffusion vers adresse de broadcast de mon sous réseau 192.168.0.255)
+*  LLMNR (Diffusion vers les adresses de multicast IPv4: 224.0.0.252 et Ipv6:  FF02::1:3)
 
-![image](https://user-images.githubusercontent.com/83721477/150578911-fb890914-8b91-4a75-a363-eff19a8aa559.png)
-![image](https://user-images.githubusercontent.com/83721477/150578947-38ab83a8-8906-48c2-9329-8530d78170ff.png)
-![image](https://user-images.githubusercontent.com/83721477/150577784-f74b1e0c-ef6f-426e-be3d-e260ebb7878f.png)
-![image](https://user-images.githubusercontent.com/83721477/150579004-d8fe516d-3de3-4fad-8250-cc297af2f491.png)
-![Responder-Edit](https://user-images.githubusercontent.com/83721477/150579450-b9d6807d-8680-4ff9-be10-d91c02c7338b.gif)
+En complément d’information: LLMNR supporte IPv6; NBT-NS ne supporte que IPv4
