@@ -1,7 +1,7 @@
 # SMB attack
 Découverte et exploitation des protocoles LLMNR et NBT-NS
 
-Lien Responder : Lien Responder: https://github.com/lgandx/Responder
+Lien Responder: https://github.com/lgandx/Responder
 
 ## Protocoles NBT-NS, LLMNR
 >Link-Local Multicast Name Resolution (LLMNR) et Netbios Name Service (NBT-NS) sont deux composants présents en environnement Microsoft. LLMNR a été introduit dans Windows Vista et est le successeur de NBT-NS.
