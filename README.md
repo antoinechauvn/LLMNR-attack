@@ -13,8 +13,8 @@ Historiquement, Microsoft et Apple ont proposé comme standards leurs propres pr
 >Pourtant LLMNR ou NBT-NS (aussi obsolète) sont très utilisés dans Windows. mDNS a également été implémenté à partir de Windows 10, mais son utilisation est limitée à la découverte d’une imprimante en réseau.
 
 ## Recherche de noms sur le réseau
-Quand un client recherche un nom sur le réseau il effectue sa recherche en plusieurs étapes et attend une réponse d’un service distant. Prenons un exemple, je recherche le partage réseau \\srvinconnu
-Windows va effectuer les recherches via plusieurs mécanisme pour tenter de trouver \\srvinconnu
+Quand un client recherche un nom sur le réseau il effectue sa recherche en plusieurs étapes et attend une réponse d’un service distant. Prenons un exemple, je recherche le partage réseau `\\srvinconnu`
+Windows va effectuer les recherches via plusieurs mécanisme pour tenter de trouver `\\srvinconnu`
 
 * Recherche en utilisant le HOST  local de la machine (C:\Windows\System32\drivers\etc\hosts);
 * S’il ne trouve rien: recherche dans le cache DNS local (ipconfig /displaydns);
