@@ -72,3 +72,5 @@ L’exemple ci dessous montre une recherche du hash par dictionnaire en utilisan
 ![image](https://user-images.githubusercontent.com/83721477/150602796-8bccf440-0419-4787-8eeb-8dae3c68a939.png)
 
 A noter que le serveur SMB exécuté par Responder supporte l’ensemble des systèmes de type Microsoft Windows allant de la version NT4 jusqu’à Windows Server 2012 RC. Le système d’exploitation mac os x Mojave fait également partie de la liste des systèmes supportés par le serveur SMB de Responder, au même titre que tous les systèmes utilisant la solution Open Source Samba.
+
+Lien Responder: https://github.com/lgandx/Responder
