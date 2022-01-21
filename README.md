@@ -75,4 +75,4 @@ L’exemple ci dessous montre une recherche du hash par dictionnaire en utilisan
 
 A noter que le serveur SMB exécuté par Responder supporte l’ensemble des systèmes de type Microsoft Windows allant de la version NT4 jusqu’à Windows Server 2012 RC. Le système d’exploitation mac os x Mojave fait également partie de la liste des systèmes supportés par le serveur SMB de Responder, au même titre que tous les systèmes utilisant la solution Open Source Samba.
 
-###### © 2022 Remi VERNIER
+###### © 2022 Remi VERNIER, viperone, CYNET
