@@ -1,7 +1,9 @@
 # SMB attack
-Découverte et exploitation du protocole LLMNR
+Découverte et exploitation des protocoles LLMNR et NBT-NS
 
-## Protocoles NBT-NS, LLMNR?
+Lien Responder : Lien Responder: https://github.com/lgandx/Responder
+
+## Protocoles NBT-NS, LLMNR
 >Link-Local Multicast Name Resolution (LLMNR) et Netbios Name Service (NBT-NS) sont deux composants présents en environnement Microsoft. LLMNR a été introduit dans Windows Vista et est le successeur de NBT-NS.
 
 >Ces composants permettent d’aider à identifier des hôtes sur le même sous-réseau lorsque les services DNS centraux échouent. Ainsi, si une machine tente de résoudre un hôte particulier, mais que la résolution DNS échoue, la machine tentera alors de demander à toutes les autres machines du réseau local la bonne adresse via NBT-NS ou LLMNR :
@@ -72,5 +74,3 @@ L’exemple ci dessous montre une recherche du hash par dictionnaire en utilisan
 ![image](https://user-images.githubusercontent.com/83721477/150602796-8bccf440-0419-4787-8eeb-8dae3c68a939.png)
 
 A noter que le serveur SMB exécuté par Responder supporte l’ensemble des systèmes de type Microsoft Windows allant de la version NT4 jusqu’à Windows Server 2012 RC. Le système d’exploitation mac os x Mojave fait également partie de la liste des systèmes supportés par le serveur SMB de Responder, au même titre que tous les systèmes utilisant la solution Open Source Samba.
-
-Lien Responder: https://github.com/lgandx/Responder
