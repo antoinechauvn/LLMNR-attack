@@ -49,7 +49,7 @@ Attaque SMB
  ![image](https://user-images.githubusercontent.com/83721477/150602762-3c8ff229-1a34-443f-bf06-3a0abc5252b0.png)
 
 
-Ce type d’attaque consiste pour l’attaquant à écouter sur le réseau les diffusions LLMNR ou NBT-NS, et répondre quand un client essaye de se connecter à un serveur qui n’est pas connu du DNS. Cela signifie pour le client qu’il faut qu’il essaye de se connecter à un serveur inexistant ou pour lequel il se trompe d’orthographe. Par exemple \\SVR01 au lieu de \\SRV01 ou dans notre cas \\SRVINCONNU:
+Ce type d’attaque consiste pour l’attaquant à écouter sur le réseau les diffusions LLMNR ou NBT-NS, et répondre quand un client essaye de se connecter à un serveur qui n’est pas connu du DNS. Cela signifie pour le client qu’il faut qu’il essaye de se connecter à un serveur inexistant ou pour lequel il se trompe d’orthographe. Par exemple `\\SVR01` au lieu de `\\SRV01` ou dans notre cas `\\SRVINCONNU`:
 
 Vue coté attaquant (avec l’outil Responder en écoute)
 
